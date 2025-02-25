@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    background-color: rgb(172, 172, 172);
+}
+.primaryNav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 1px 1px 10px rgba(110, 0, 93, 0.6);
+}
+.logoSvgPart {
+    width: 3.5rem;
+    fill: rgb(102, 0, 165);
+    margin: 0;
+    margin-left: 1rem;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.2rem;
+    text-shadow:  1px 1px rgb(76, 1, 95);
+}
+.logo h1 {
+    margin: 1.4rem 0;
+    font-weight: 500;
+    color: rgb(76, 1, 95)
+}
+
+.buttonsNav {
+    display: flex;
+    margin-right: 3rem;
+    gap: 30px;
+}
+
+.buttonsNav button {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    background-color: rgb(83, 14, 148);
+    color: white;
+    border: 1px solid rgb(202, 202, 202);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.buttonsNav button:hover {
+    transform: translateY(-1px);
+}
