@@ -7,7 +7,6 @@ require('dotenv').config();
 const path = require('path');
 const app = express();
 require('./configure/passport');
-
 /*PreConfigure*/
 app.use(express.urlencoded({ extended: true }));
 app.use(session({

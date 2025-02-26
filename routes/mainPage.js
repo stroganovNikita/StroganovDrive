@@ -9,11 +9,15 @@ mainPageRouter.get('/signUp', (req, res) => res.render('signUp'))
 mainPageRouter.post('/signUp', mainPageController.signUpQuery);
 
 mainPageRouter.get('/logIn', (req, res) => {
-    if (req.session.messages) {
-        return res.status(400).render("logIn", {errors: [{msg: req.session.messages[0]}]});
+
+    if (req.session.messages.length > 0) {
+        const error = req.session.messages[0];
+        req.session.messages.splice(0);
+        return res.status(400).render("logIn", {errors: [{msg: error}]});
     }
+    console.log(req.session.messages)
     res.render('logIn')
 });
-mainPageRouter.post('/logIn', mainPageController.logInQuery, passport.authenticate('local', {successRedirect: "/", successMessage: '', failureRedirect: '/logIn', failureMessage: "No such username or password!"}));
+mainPageRouter.post('/logIn', mainPageController.logInQuery, passport.authenticate('local', {successRedirect: "/", successMessage: undefined, failureRedirect: '/logIn', failureMessage: "No such username or password!"}));
 
 module.exports = mainPageRouter
