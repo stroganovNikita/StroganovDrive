@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroganov Drive | Log in</title>
+    <link rel="stylesheet" href="mainPage.css">
+</head>
+<body>
+        <%- include('partials/nav.ejs') %>
+        <main>
+            <section class="signUpSection">
+                <form class="signUpForm" action="/logIn" method="POST">
+                    <h2 class="signUpLogo">Login</h2>
+                    <%- include('partials/error.ejs') %>
+                    <label for="nickName">Nickname</label>
+                     <input type="nickName" id="nickName" name="nickName" maxlength="20" required />
+                    <label for="password">Password</label>
+                     <input type="password" id="password" name="password" maxlength="25" required />
+                    <button type="submit">Log in</button> 
+                </form>
+            </section>
+        </main>
+</body>
+</html>
