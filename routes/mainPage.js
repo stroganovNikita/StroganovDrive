@@ -2,6 +2,8 @@ const express = require('express');
 const mainPageRouter = express.Router();
 const mainPageController = require('../controllers/mainPageController');
 const passport = require('passport');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/'});
 
 mainPageRouter.get('/', (req, res) => { 
     if (req.isAuthenticated()) {
@@ -29,6 +31,10 @@ mainPageRouter.post('/logIn', mainPageController.logInQuery, passport.authentica
 mainPageRouter.get('/logOut', (req, res) => {
     req.logout();
     res.redirect('/');
+})
+
+mainPageRouter.post('/upload', upload.single('file'), (req, res) => {
+  res.redirect('/')
 })
 
 module.exports = mainPageRouter

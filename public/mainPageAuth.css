@@ -1,0 +1,12 @@
+.mainForAuth {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    height: 87%
+}
+.explorer {
+    box-shadow: 0 0 10px rgba(62, 0, 53, 0.6);
+    clip-path: inset(0 -15px 0 0);
+}
+.uploadForm {
+    margin-left: 1rem;
+}

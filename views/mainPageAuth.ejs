@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stroganov Drive</title>
     <link rel="stylesheet" href="mainPage.css">
+    <link rel="stylesheet" href="mainPageAuth.css">
 </head>
 <body>
     <%- include('./partials/nav.ejs') %>
-    <form>
-        <input type="file">
-        <button type="submit">Submit</button>
-    </form>
+    <main class="mainForAuth">
+      <aside class="explorer">
+
+      </aside>
+      <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
+          <input type="file" name="file">
+          <button type="submit" class="testim">Submit</button>
+      </form>
+    </main>
 </body>
 </html>
