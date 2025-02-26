@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stroganov Drive | Error</title>
+    <title>Stroganov Drive</title>
     <link rel="stylesheet" href="mainPage.css">
 </head>
 <body>
-  <% if (locals.errMsg) { %>
-    <h1 class="errMsg"><%= locals.errMsg %></h1>
-    <a class='errHref' href="/">Go to home?</a>
-  <% } %>
+    <%- include('./partials/nav.ejs') %>
+    <form>
+        <input type="file">
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

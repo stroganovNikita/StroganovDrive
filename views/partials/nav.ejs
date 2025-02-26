@@ -9,8 +9,15 @@
        </h1>
      </div>
   </a>
+  <% if (!locals.currentUser) { %>
     <div class="buttonsNav">
         <a href="logIn"><button>Log in</button></a>
         <a href="signUp"><button>Sign up</button></a>
     </div>
+  <% } else { %>
+    <div class="buttonsNav">
+      <!-- <a href="logIn"><button>Log in</button></a> -->
+      <a href="logOut"><button>Log out</button></a>
+  </div>
+  <% } %>
 </nav>

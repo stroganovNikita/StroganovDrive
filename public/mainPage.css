@@ -106,3 +106,13 @@ body {
     letter-spacing: 1px;
 }
 
+.errMsg {
+    text-align: center;
+    color: rgb(178, 76, 241);
+}
+.errHref {
+  display: block;
+  text-align: center;
+  font-size: 1.3rem;
+  color: rgb(204, 148, 239);
+}
