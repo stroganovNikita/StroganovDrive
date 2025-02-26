@@ -14,9 +14,9 @@
                     <h2 class="signUpLogo">Login</h2>
                     <%- include('partials/error.ejs') %>
                     <label for="nickName">Nickname</label>
-                     <input type="nickName" id="nickName" name="nickName" maxlength="20" required />
+                     <input type="nickName" id="nickName" name="nickName" minlength="8" maxlength="20" required />
                     <label for="password">Password</label>
-                     <input type="password" id="password" name="password" maxlength="25" required />
+                     <input type="password" id="password" name="password" minlength="8" maxlength="25" required />
                     <button type="submit">Log in</button> 
                 </form>
             </section>

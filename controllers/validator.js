@@ -12,13 +12,13 @@ exports.signUpValidator = [
     body('nickName').trim()
       .notEmpty().withMessage('Nickname not should be empty')
       .isAlphanumeric().withMessage('Nickname should be alphanumeric')
-      .isLength({min: 1, max: 20}).withMessage('Should be minimum 1 character and maximum 20'),
+      .isLength({min: 8, max: 20}).withMessage('Should be minimum 1 character and maximum 20'),
     body('password')
       .notEmpty().withMessage('Password not should be empty')
       .isLength({min: 8, max: 25}).withMessage('Should be minimum 8 character and maximum 25'),
     body('confPassword')
       .notEmpty().withMessage('Password not should be empty')
-      .isLength({min: 1, max: 25}).withMessage('Should be minimum 1 character and maximum 25')
+      .isLength({min: 8, max: 25}).withMessage('Should be minimum 1 character and maximum 25')
       .custom((value, {req}) => value === req.body.password).withMessage('The passwords should be identical')
 ];
 
@@ -26,10 +26,10 @@ exports.logInValidator = [
     body('nickName').trim()
     .notEmpty().withMessage('Nickname not should be empty')
     .isAlphanumeric().withMessage('Nickname should be alphanumeric')
-    .isLength({min: 1, max: 20}).withMessage('Should be minimum 1 character and maximum 20')
+    .isLength({min: 8, max: 20}).withMessage('Nickname should be minimum 8 character and maximum 20')
     .escape(),
     body('password')
     .notEmpty().withMessage('Password not should be empty')
-    .isLength({min: 1, max: 25}).withMessage('Should be minimum 1 character and maximum 25')
+    .isLength({min: 8, max: 25}).withMessage('Passowrd should be minimum 8 character and maximum 25')
   ]
   

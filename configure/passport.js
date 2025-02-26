@@ -12,16 +12,42 @@ const customFields = {
 
 const StrategyFn = async (username, password, done) => {
     try {
-        const user = await prisma.user.findUnique({
+        const users = await prisma.user.findMany({
             where: {
-                username: username
+                nickName: username
             }
         });
-        console.log("test")
-        return user
-    } catch {
-
+        const user = users[0];
+        if (!user) {
+            return done(null, false, {message: "Such username not found!"})
+        }
+        const match = await bcrypt.compare(password, user.password)
+        if (!match) {
+            return done(null, false, {message: "Password not correct!"})
+        }
+        return done(null, user);
+    } catch(err) {
+        return done(err)
     }
-}
+};
 
-StrategyFn()
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await prisma.user.findMany({
+            where: {
+                id: id
+            }
+        });
+        done(null, user[0]);
+    } catch(err) {
+        done(err);
+    }
+});
+
+const customStrategy = new LocalStrategy(customFields, StrategyFn);
+
+passport.use(customStrategy);

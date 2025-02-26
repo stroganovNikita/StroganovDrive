@@ -1,5 +1,4 @@
 const { PrismaClient } = await import('@prisma/client');
-console.log(PrismaClient)
 const prisma = new PrismaClient();
 const bcrypt = await import('bcryptjs');
 
@@ -25,5 +24,5 @@ const checkNickname = async (nickName) => {
 
 export { signUpQueryDB, checkNickname }
 
-const check = await prisma.user.findMany();
-console.log(check)
+// const check = await prisma.user.findMany();
+// console.log(check)
