@@ -13,4 +13,15 @@ model User {
   lastName  String
   nickName  String @db.VarChar(255)
   password  String @db.VarChar(255)
+  folder Folder[]
+}
+
+model Folder {
+  id Int @id @default(autoincrement())
+  name String
+  parentFolder Int?
+  folder Folder? @relation("relationFolders", fields: [parentFolder], references: [id])
+  childFolder Folder[] @relation("relationFolders") 
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
 }

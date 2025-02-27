@@ -9,7 +9,12 @@ const signUpQueryDB = async (firstName, lastName, nickName, password) => {
             firstName: firstName,
             lastName: lastName,
             nickName: nickName,
-            password: hashedPassword
+            password: hashedPassword,
+            folder: {
+                create: {
+                  name: 'Primary Folder'
+               }
+            }
         }
     })
 };
@@ -22,7 +27,35 @@ const checkNickname = async (nickName) => {
     })
 };
 
-export { signUpQueryDB, checkNickname }
+const getFolders = async (id) => {
+  const folders = await prisma.folder.findMany({
+    where: {
+      authorId: id,
+    }
+  });
+  return folders
+}
 
-// const check = await prisma.user.findMany();
-// console.log(check)
+export { signUpQueryDB, checkNickname, getFolders }
+
+
+// await prisma.folder.update({
+//     where: {
+//         id: 2
+//     },
+//     data: {
+//         childFolder: {
+//               create: {
+//                   name: 'Primary Folder - exactly',
+//                   authorId: 2,
+//             }
+//         }
+//     }
+// })
+
+const check = await prisma.folder.findMany({
+    where: {
+        authorId: 2,
+    }
+});
+console.log(check)

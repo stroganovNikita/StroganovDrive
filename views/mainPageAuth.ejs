@@ -11,8 +11,11 @@
     <%- include('./partials/nav.ejs') %>
     <main class="mainForAuth">
       <aside class="explorer">
-
+        <% folders.map((folder) => { %>
+            <p><%= folder.name %></p>
+        <% }) %>
       </aside>
+
       <form action="/upload" method="POST" enctype="multipart/form-data" class="uploadForm">
           <input type="file" name="file">
           <button type="submit" class="testim">Submit</button>

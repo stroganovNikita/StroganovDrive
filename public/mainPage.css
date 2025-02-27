@@ -31,13 +31,14 @@ body {
 }
 
 .buttonsNav button {
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 0.5rem 1rem;
     background-color: rgb(83, 14, 148);
     color: white;
     border: 1px solid rgb(202, 202, 202);
     border-radius: 5px;
     cursor: pointer;
+    letter-spacing: 1px;
     transition: transform 0.2s;
 }
 

@@ -2,6 +2,15 @@ const { validationResult } = require('express-validator');
 const { signUpValidator, logInValidator } = require('./validator');
 const db  = import('../db/queries.js');
 
+exports.handleMainPage = async (req, res) => {
+  if (req.isAuthenticated()) {
+    res.locals.currentUser = req.user
+    const folders = await (await db).getFolders(req.user.id)
+    return res.render('mainPageAuth', {folders: folders})
+} 
+res.render('mainPage')
+}
+
 exports.signUpQuery =  [
     signUpValidator,
     async (req, res) => {
