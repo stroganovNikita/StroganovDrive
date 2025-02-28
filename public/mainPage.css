@@ -14,14 +14,10 @@ body {
     margin-top: 0.5rem;
     margin-left: 1rem;
     max-width: 200px;
+    pointer-events: none;
 }
-.logoHref {
-    text-decoration: none;
-}
-.logo h1 {
-    margin: 1.4rem 0;
-    font-weight: 500;
-    color: rgb(196, 101, 255);
+.logo {
+    user-select: none;
 }
 
 .buttonsNav {

@@ -11,15 +11,16 @@ const signUpQueryDB = async (firstName, lastName, nickName, password) => {
             nickName: nickName,
             password: hashedPassword,
             folder: {
-                create: {
-                  name: 'Primary Folder'
-               }
+                create: [
+                  {name: 'Personal'},
+                  {name: 'Recently deleted'}
+                ]
             }
         }
     })
 };
 
-const checkNickname = async (nickName) => {
+const checkNicknameDB = async (nickName) => {
     return await prisma.user.findMany({
         where: {
             nickName: nickName
@@ -27,35 +28,62 @@ const checkNickname = async (nickName) => {
     })
 };
 
-const getFolders = async (id) => {
+const getPrimaryFoldersDB = async (id) => {
   const folders = await prisma.folder.findMany({
     where: {
       authorId: id,
+      parentFolder: null
     }
   });
   return folders
 }
 
-export { signUpQueryDB, checkNickname, getFolders }
+const handleFolderDB = async (id) => {
+  const folder = await prisma.folder.findMany({
+    where: {
+      id: id,
+      parentFolder: null
+    },
+    include: {
+      childFolder: true
+    }
+  })
+  // console.log(folder)
+  return folder[0].childFolder
+}
+
+const handleSubfolderDB = async (id) => {
+  const folder = await prisma.folder.findMany({
+    where: {
+      id: id
+    },
+    include: {
+      childFolder: true
+    }
+  })
+
+  return folder[0].childFolder
+}
+
+
+
+
+export { signUpQueryDB, checkNicknameDB, getPrimaryFoldersDB, handleFolderDB, handleSubfolderDB }
 
 
 // await prisma.folder.update({
 //     where: {
-//         id: 2
+//        id: 4
 //     },
 //     data: {
-//         childFolder: {
-//               create: {
-//                   name: 'Primary Folder - exactly',
-//                   authorId: 2,
-//             }
-//         }
+//       name: "SQL"
 //     }
 // })
+ 
+// const check = await prisma.folder.findMany({
+//   include: {
+//     childFolder: true
+//   }
+// });
 
-const check = await prisma.folder.findMany({
-    where: {
-        authorId: 2,
-    }
-});
-console.log(check)
+// console.log(check)

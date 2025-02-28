@@ -10,3 +10,83 @@
 .uploadForm {
     margin-left: 1rem;
 }
+.primaryFolders {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    gap: 1rem;
+}
+.primaryFoldersHref {
+    text-decoration: none;
+    font-size: 1.3rem;
+    color: rgb(228, 216, 236);
+}
+.primaryFolders svg {
+    width: 30px;
+    fill: rgb(228, 216, 236);
+}
+.subfolderDiv {
+   position: relative;
+   width: max-content;
+   height: max-content;
+   margin: 10px;
+}
+.subfolderDiv svg {
+  fill: rgb(178, 72, 249);
+  width: 70px;
+  margin: 0;
+}
+.subfolderDiv p {
+    margin: 0;
+    text-align: center;
+    color: rgb(178, 72, 249);
+}
+.subfolderHref {
+    display: block;
+    width: max-content;
+    height: max-content;
+    margin: 1rem;
+    text-decoration: none;
+}
+.subfolderHref:hover {
+    background-color: rgb(75, 75, 75);
+    opacity: 1;
+    border-radius: 15%;
+}
+.foldersSection {
+    display: flex;
+    flex-wrap: wrap;
+}
+.primaryDivForSubFolder {
+    height: max-content;
+    width: max-content;
+}
+.primaryDivForSubFolder:hover .actionsSubFolder {
+    visibility: visible;
+}
+.actionsSubFolder {
+    display: flex;
+    visibility: hidden;
+    position: relative;
+    top: 15px;
+    justify-content: center;
+    gap: 10px;
+    margin-right: 5px;
+}
+.actionsSubFolder button{
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+.actionsSubFolder button:nth-of-type(2){
+    font-size: 1.5rem;
+    color: rgb(228, 216, 236);
+}
+.actionsSubFolder svg{ 
+    width: 1.5rem;
+    fill: rgb(228, 216, 236);
+}
+.actionsSubFolder button:hover{
+    background-color: rgb(119, 119, 119);
+}

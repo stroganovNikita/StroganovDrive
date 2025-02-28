@@ -11,7 +11,7 @@ mainPageRouter.get('/signUp', (req, res) => res.render('signUp'))
 mainPageRouter.post('/signUp', mainPageController.signUpQuery);
 
 mainPageRouter.get('/logIn', (req, res) => {
-
+    
     if (req.session.messages) {
         const error = req.session.messages[0];
         req.session.messages = undefined;
@@ -29,5 +29,9 @@ mainPageRouter.get('/logOut', (req, res) => {
 mainPageRouter.post('/upload', upload.single('file'), (req, res) => {
   res.redirect('/')
 })
+
+mainPageRouter.get('/folder/:id', mainPageController.handleFolder);
+
+mainPageRouter.get('/folder/:folderId/subfolder/:subfolderId', mainPageController.handleSubfolder);
 
 module.exports = mainPageRouter
