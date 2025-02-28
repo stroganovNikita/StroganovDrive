@@ -78,8 +78,6 @@
     background: none;
     border: 0;
     cursor: pointer;
-}
-.actionsSubFolder button:nth-of-type(2){
     font-size: 1.5rem;
     color: rgb(228, 216, 236);
 }

@@ -4,12 +4,12 @@ const db  = import('../db/queries.js');
 
 exports.handleMainPage = async (req, res) => {
   if (req.isAuthenticated()) {
-    res.locals.currentUser = req.user
-    const folders = await (await db).getPrimaryFoldersDB(req.user.id)
-    return res.render('mainPageAuth', {folders: folders})
-} 
-res.render('mainPage')
-}
+    res.locals.currentUser = req.user;
+    const folders = await (await db).getPrimaryFoldersDB(req.user.id);
+    return res.render('mainPageAuth', {folders: folders});
+  } 
+  res.render('mainPage')
+};
 
 exports.signUpQuery =  [
     signUpValidator,
@@ -51,16 +51,20 @@ exports.logInQuery = [
 exports.handleFolder = async (req, res) => {
   const primaryFolders = await (await db).getPrimaryFoldersDB(req.user.id);
   const folders = await (await db).handleFolderDB(Number(req.params.id));
-  res.locals.currentUser = req.user
+  res.locals.currentUser = req.user;
   res.locals.currentFolder = req.params.id;
-  // console.log(primaryFolders + ' / ' + folders)
   return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
-}
+};
 
 exports.handleSubfolder = async (req, res) => {
-  const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.params.folderId));
+  const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
   const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId));
   res.locals.currentUser = req.user;
   res.locals.currentFolder = req.params.folderId;
   return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
-}
+};
+
+exports.moveFolder = async (req, res) => {
+  console.log(req.params.folderId)
+  await (await db).moveFolderDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
+};

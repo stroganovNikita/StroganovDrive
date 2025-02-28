@@ -7,11 +7,10 @@ const upload = multer({ dest: 'uploads/'});
 
 mainPageRouter.get('/', mainPageController.handleMainPage);
 
-mainPageRouter.get('/signUp', (req, res) => res.render('signUp'))
+mainPageRouter.get('/signUp', (req, res) => res.render('signUp'));
 mainPageRouter.post('/signUp', mainPageController.signUpQuery);
 
-mainPageRouter.get('/logIn', (req, res) => {
-    
+mainPageRouter.get('/logIn', (req, res) => {  
     if (req.session.messages) {
         const error = req.session.messages[0];
         req.session.messages = undefined;
@@ -33,5 +32,7 @@ mainPageRouter.post('/upload', upload.single('file'), (req, res) => {
 mainPageRouter.get('/folder/:id', mainPageController.handleFolder);
 
 mainPageRouter.get('/folder/:folderId/subfolder/:subfolderId', mainPageController.handleSubfolder);
+
+mainPageRouter.post('/delete/:folderId/:subfolderId', mainPageController.moveFolder)
 
 module.exports = mainPageRouter
