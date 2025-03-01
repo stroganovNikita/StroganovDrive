@@ -10,9 +10,28 @@
 .uploadForm {
     margin-left: 1rem;
 }
+.createFolderButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    background-color: rgb(83, 14, 148);
+    color: rgb(228, 216, 236);
+    border-radius: 30px;
+    padding: 5px 15px;
+    margin-top: 1rem;
+    font-size: 1rem;
+    gap: 5px;
+    cursor: pointer;
+}
+.createFolderButton span{
+    font-size: 2.5rem;
+}
 .primaryFolders {
     display: flex;
     align-items: center;
+    padding: 0 10px;
+    margin-top: 1.2rem;
     margin-left: 1rem;
     gap: 1rem;
 }
@@ -21,10 +40,23 @@
     font-size: 1.3rem;
     color: rgb(228, 216, 236);
 }
+.primaryFolders:hover {
+    background-color: rgba(101, 29, 168, 0.3);
+    border-radius: 40px;
+    /* opacity: 0.7; */
+}
 .primaryFolders svg {
     width: 30px;
     fill: rgb(228, 216, 236);
 }
+
+.selectedPrimaryFolder .primaryFolders {
+    background-color: rgb(83, 14, 148, 0.7);
+    border-radius: 40px;
+    /* opacity: 0.7; */
+}
+
+
 .subfolderDiv {
    position: relative;
    width: max-content;
@@ -87,4 +119,7 @@
 }
 .actionsSubFolder button:hover{
     background-color: rgb(119, 119, 119);
+}
+.dialogForCreateFolder {
+    z-index: 1;
 }
