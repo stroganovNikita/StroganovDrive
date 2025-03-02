@@ -62,7 +62,7 @@ async function handleSubfolderDB(id) {
   return folder[0].childFolder
 };
 
-async function moveFolderDB(id, userId, parentFolder) {
+async function moveFolderToTrashDB(id, userId, parentFolder) {
   const test = await prisma.folder.findUnique({
     where: {
       id: parentFolder
@@ -75,37 +75,40 @@ if (test.name == "Recently deleted") {
     }
   })
 } else {
-  const movedFolder = await prisma.folder.findUnique({
-    where: {
-      id: id
-    }
-  })
   const recentlyDeleteFolder = await prisma.folder.findMany({
     where: {
       authorId: userId,
       name: 'Recently deleted',
       parentFolder: null
     }
-   })
+  })
   await prisma.folder.update({
     where: {
-      id: recentlyDeleteFolder[0].id
+      id: id
     },
     data: {
-      childFolder: {
-        create: {
-          name: movedFolder.name,
-          authorId: userId
-        }
-      }
+      parentFolder: recentlyDeleteFolder[0].id
     }
   })
-  await prisma.folder.delete({
+ }
+};
+
+async function moveFolderFromTrashDB(id, userId) {
+  const personalFolder = await prisma.folder.findMany({
     where: {
-      id: movedFolder.id
+      authorId: userId,
+      name: 'Personal',
+      parentFolder: null
     }
-  })
-}
+   });
+  await prisma.folder.update({
+    where: {
+      id: id
+    },
+    data: {
+      parentFolder: personalFolder[0].id
+    }
+  });
 };
 
 export { 
@@ -114,16 +117,21 @@ export {
   getPrimaryFoldersDB, 
   handleFolderDB, 
   handleSubfolderDB, 
-  moveFolderDB
+  moveFolderToTrashDB,
+  moveFolderFromTrashDB
 }
 
 
-// await prisma.folder.update({
+//  const check = await prisma.folder.update({
 //     where: {
-//        id: 4
+//        id: 3
 //     },
 //     data: {
-//       name: "SQL"
+//       childFolder: {
+//         create: {
+//           name: 'XSS3', authorId: 1 
+//         }
+//       }
 //     }
 // })
  

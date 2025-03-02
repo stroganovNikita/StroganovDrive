@@ -33,6 +33,12 @@ mainPageRouter.get('/folder/:id', mainPageController.handleFolder);
 
 mainPageRouter.get('/folder/:folderId/subfolder/:subfolderId', mainPageController.handleSubfolder);
 
-mainPageRouter.post('/delete/:folderId/:subfolderId', mainPageController.moveFolder)
+mainPageRouter.post('/delete/:folderId/:subfolderId', mainPageController.moveFolderToTrash);
+
+mainPageRouter.post('/restore/:folderId/:subfolderId', mainPageController.moveFolderFromTrash);
+
+mainPageRouter.post('/folder/:folderId/newFolder', (req, res) => {
+    console.log("test")
+})
 
 module.exports = mainPageRouter

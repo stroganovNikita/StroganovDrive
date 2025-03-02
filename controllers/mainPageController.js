@@ -1,12 +1,15 @@
 const { validationResult } = require('express-validator');
 const { signUpValidator, logInValidator } = require('./validator');
+const CustomError = require('../errors/customError.js');
 const db  = import('../db/queries.js');
 
 exports.handleMainPage = async (req, res) => {
   if (req.isAuthenticated()) {
     res.locals.currentUser = req.user;
     const folders = await (await db).getPrimaryFoldersDB(req.user.id);
-    return res.render('mainPageAuth', {folders: folders});
+    // return res.render('mainPageAuth', {folders: folders});
+
+    return res.redirect(`/folder/${folders[0].id}`)
   } 
   res.render('mainPage')
 };
@@ -48,12 +51,16 @@ exports.logInQuery = [
   }
 ];
 
-exports.handleFolder = async (req, res) => {
+exports.handleFolder = async (req, res, next) => {
+  try {
   const primaryFolders = await (await db).getPrimaryFoldersDB(req.user.id);
   const folders = await (await db).handleFolderDB(Number(req.params.id));
   res.locals.currentUser = req.user;
   res.locals.currentFolder = req.params.id;
   return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
+} catch {
+  next(new CustomError("Page not found. Maybe no such folder"))
+}
 };
 
 exports.handleSubfolder = async (req, res) => {
@@ -61,10 +68,14 @@ exports.handleSubfolder = async (req, res) => {
   const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId));
   res.locals.currentUser = req.user;
   res.locals.currentFolder = req.params.folderId;
+  res.locals.currentSubfolder = req.params.subfolderId;
   return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
 };
 
-exports.moveFolder = async (req, res) => {
-  console.log(req.params.folderId)
-  await (await db).moveFolderDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
+exports.moveFolderToTrash = async (req, res) => {
+  await (await db).moveFolderToTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId));
 };
+
+exports.moveFolderFromTrash = async (req, res) => {
+  await (await db).moveFolderFromTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
+}

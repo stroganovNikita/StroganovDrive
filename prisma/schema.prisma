@@ -20,7 +20,7 @@ model Folder {
   id Int @id @default(autoincrement())
   name String
   parentFolder Int?
-  folder Folder? @relation("relationFolders", fields: [parentFolder], references: [id])
+  folder Folder? @relation("relationFolders", fields: [parentFolder], references: [id], onDelete: Cascade, onUpdate: Cascade)
   childFolder Folder[] @relation("relationFolders") 
   author User @relation(fields: [authorId], references: [id])
   authorId Int

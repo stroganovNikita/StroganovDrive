@@ -41,6 +41,7 @@ app.listen(PORT, () => console.log(`Server listen on port ${PORT}`));
 app.get("*", (req, res, next) => {
     next(new CustomError('Page not Found'))
 });
+
 app.use((err, req, res, next) => {
     res.status(err.statusCode || 500).render('errPage', {errMsg: err.message})
 });
