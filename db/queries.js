@@ -65,7 +65,8 @@ async function handleSubfolderDB(id) {
 async function moveFolderToTrashDB(id, userId, parentFolder) {
   const test = await prisma.folder.findUnique({
     where: {
-      id: parentFolder
+      id: parentFolder,
+      authorId: userId
     }
   })
 if (test.name == "Recently deleted") {
@@ -111,6 +112,32 @@ async function moveFolderFromTrashDB(id, userId) {
   });
 };
 
+async function createNewFolderDB(folderId, userId, folderName) {
+  await prisma.folder.update({
+    where: {
+      id: folderId,
+      authorId: userId
+    },
+    data: {
+      childFolder: {
+        create: {
+          name: folderName,
+          authorId: userId
+        }
+      }
+    }
+  })
+}
+
+async function getParentFolderDB(folderId, userId) {
+  const test = await prisma.folder.findMany({
+     
+ })
+  console.log(test[0])
+}
+
+// getParentFolderDB()
+
 export { 
   signUpQueryDB, 
   checkNicknameDB, 
@@ -118,7 +145,8 @@ export {
   handleFolderDB, 
   handleSubfolderDB, 
   moveFolderToTrashDB,
-  moveFolderFromTrashDB
+  moveFolderFromTrashDB,
+  createNewFolderDB
 }
 
 
@@ -141,4 +169,4 @@ export {
 //   }
 // });
 
-// console.log(check)
+// console.log(check)   

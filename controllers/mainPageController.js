@@ -7,8 +7,6 @@ exports.handleMainPage = async (req, res) => {
   if (req.isAuthenticated()) {
     res.locals.currentUser = req.user;
     const folders = await (await db).getPrimaryFoldersDB(req.user.id);
-    // return res.render('mainPageAuth', {folders: folders});
-
     return res.redirect(`/folder/${folders[0].id}`)
   } 
   res.render('mainPage')
@@ -53,23 +51,27 @@ exports.logInQuery = [
 
 exports.handleFolder = async (req, res, next) => {
   try {
-  const primaryFolders = await (await db).getPrimaryFoldersDB(req.user.id);
-  const folders = await (await db).handleFolderDB(Number(req.params.id));
-  res.locals.currentUser = req.user;
-  res.locals.currentFolder = req.params.id;
-  return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
-} catch {
-  next(new CustomError("Page not found. Maybe no such folder"))
-}
+    const primaryFolders = await (await db).getPrimaryFoldersDB(req.user.id);
+    const folders = await (await db).handleFolderDB(Number(req.params.id));
+    res.locals.currentUser = req.user;
+    res.locals.currentFolder = req.params.id;
+    return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
+  } catch {
+    next(new CustomError("Page not found. Maybe no such folder"))
+  }
 };
 
-exports.handleSubfolder = async (req, res) => {
-  const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
-  const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId));
-  res.locals.currentUser = req.user;
-  res.locals.currentFolder = req.params.folderId;
-  res.locals.currentSubfolder = req.params.subfolderId;
-  return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
+exports.handleSubfolder = async (req, res, next) => {
+  try {
+    const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
+    const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId));
+    res.locals.currentUser = req.user;
+    res.locals.currentFolder = req.params.folderId;
+    res.locals.currentSubfolder = req.params.subfolderId;
+    return res.render('mainPageAuth', {folders: primaryFolders, folder: folders});
+  } catch {
+    next(new CustomError("Page not found. Maybe no such folder"))
+  }
 };
 
 exports.moveFolderToTrash = async (req, res) => {
@@ -78,4 +80,18 @@ exports.moveFolderToTrash = async (req, res) => {
 
 exports.moveFolderFromTrash = async (req, res) => {
   await (await db).moveFolderFromTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
-}
+};
+
+exports.createNewFolder = async (req, res, next) => {
+ try {
+   if (req.params.subfolderId == 'none') {
+     await (await db).createNewFolderDB(Number(req.params.folderId), req.user.id, req.body.newFolder);
+     res.redirect(`/folder/${req.params.folderId}`)
+   } else {
+     await (await db).createNewFolderDB(Number(req.params.subfolderId), req.user.id, req.body.newFolder);
+     res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+   }
+ } catch {
+   next(new CustomError("Error during creation, please write to the developer"))
+ }
+};

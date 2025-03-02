@@ -14,9 +14,14 @@
         </form>
       </div>
     <% } else { %>
-      <form class="formRestoreFolder" action="/restore/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
-        <button class="restoreFolderBtn">Restore</button>
-      </form>
+      <div class="divFormRestoreFolder">
+        <form class="formRestoreFolder" action="/restore/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
+          <button class="restoreFolderBtn">Restore</button>
+        </form>
+        <form class="formRestoreFolder" action="/delete/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
+          <button class="restoreFolderBtn">X</button>
+        </form>
+      </div>
     <% } %>
       <a href="/folder/<%=locals.currentFolder%>/subfolder/<%=folder.id%>" class="subfolderHref">
         <div class="subfolderDiv">
