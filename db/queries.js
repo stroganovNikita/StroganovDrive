@@ -127,16 +127,36 @@ async function createNewFolderDB(folderId, userId, folderName) {
       }
     }
   })
-}
+};
+
+async function updateFolderNameDB(folderId, userId, folderName) {
+  await prisma.folder.update({
+    where: {
+      id: folderId,
+      authorId: userId
+    },
+    data: {
+      name: folderName
+    }
+  })
+};
 
 async function getParentFolderDB(folderId, userId) {
-  const test = await prisma.folder.findMany({
-     
- })
-  console.log(test[0])
-}
+  const folder = await prisma.folder.findUnique({
+     where: {
+      id: folderId,
+      authorId: userId
+     }
+  });
+  const parentFolder = await prisma.folder.findUnique({
+    where: {
+      id: folder.parentFolder,
+      authorId: userId
+    }
+  })
+  return parentFolder
+};
 
-// getParentFolderDB()
 
 export { 
   signUpQueryDB, 
@@ -146,7 +166,9 @@ export {
   handleSubfolderDB, 
   moveFolderToTrashDB,
   moveFolderFromTrashDB,
-  createNewFolderDB
+  createNewFolderDB,
+  getParentFolderDB,
+  updateFolderNameDB
 }
 
 

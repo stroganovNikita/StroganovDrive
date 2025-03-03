@@ -4,11 +4,12 @@
     <div class="primaryDivForSubFolder">
     <% if (locals.folders[0].id == locals.currentFolder) { %>
       <div class="actionsSubFolder">
-        <button>
+        <button class="formEditFolder subfolder<%=folder.id%>">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M6 2C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H10V20.1L20 10.1V8L14 2H6M13 3.5L18.5 9H13V3.5M20.1 13C20 13 19.8 13.1 19.7 13.2L18.7 14.2L20.8 16.3L21.8 15.3C22 15.1 22 14.7 21.8 14.5L20.5 13.2C20.4 13.1 20.3 13 20.1 13M18.1 14.8L12 20.9V23H14.1L20.2 16.9L18.1 14.8Z" />
           </svg>
         </button>
+        <%- include('./dialogForUpdate.ejs', {folder: folder}) %>
         <form class="formDeleteFolder" action="/delete/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
           <button class="deleteFolderBtn" onclick="return confirm('Delete folder?')">X</button>
         </form>
@@ -28,10 +29,27 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
           </svg>
-          <p><%=folder.name%></p>
+          <p class="folderName"><%=folder.name%></p>
         </div>
       </a> 
     </div>
       <% }) %>
-    <% } %> 
+    <% } %>
 </section>
+<script>
+  const formEditFolder = document.querySelectorAll('.formEditFolder');
+  const cancelFormEdit = document.querySelectorAll('.cancelButtonForUpdate')
+  formEditFolder.forEach((btn) => {
+    const dialog = btn.nextElementSibling
+    btn.addEventListener('click', () => {
+      dialog.showModal()
+    })
+  });
+
+  cancelFormEdit.forEach((btn) => {
+    const dialog = btn.closest('dialog')
+    btn.addEventListener('click', () => {
+      dialog.close()
+    })
+  })
+</script>

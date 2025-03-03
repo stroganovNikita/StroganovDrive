@@ -11,7 +11,7 @@
     <%- include('./partials/nav.ejs') %>
     <main class="mainForAuth">
       <aside class="explorer">
-        <button class="createFolderButton"><span>+</span> Create</button>
+        <button class="createFolderButton" <%=locals.currentFolder == folders[0].id ? '' : 'disabled' %>><span>+</span> Create</button>
             <a href="/folder/<%=folders[0].id%>" class="primaryFoldersHref <%=locals.currentFolder == folders[0].id ? 'selectedPrimaryFolder' : '' %>" >
               <div class="primaryFolders">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -36,20 +36,21 @@
           <input type="file" name="file">
           <button type="submit" class="testim">Submit</button>
       </form> -->
-      <%- include('./partials/dialog.ejs') %>
+      <%- include('./partials/dialogForCreate.ejs') %>
     </main>
 </body>
 <script>
-  const dialog = document.querySelector('.dialogForCreateFolder');
-  const buttonTrigger = document.querySelector('.createFolderButton');
-  const cancelButtonForCreateButton = document.querySelector('.cancelButtonForCreateButton');
+  const dialogCreate = document.querySelector('.dialogForCreateFolder');
+  const createbuttonTrigger = document.querySelector('.createFolderButton');
+  const cancelButtonForCreate = document.querySelector('.cancelButtonForCreate');
 
-  buttonTrigger.addEventListener('click', () => {
-      dialog.showModal()
+  createbuttonTrigger.addEventListener('click', () => {
+    dialogCreate.showModal()
   });
-  
-  cancelButtonForCreateButton.addEventListener('click', () => {
-    dialog.close()
+
+
+  cancelButtonForCreate.addEventListener('click', () => {
+    dialogCreate.close()
   });
 </script>
 </html>

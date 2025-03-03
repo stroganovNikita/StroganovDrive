@@ -43,4 +43,5 @@ mainPageRouter.post('/folder/:folderId/newFolder', (req, res) => {
 
 mainPageRouter.post('/newFolder/:folderId/:subfolderId', mainPageController.createNewFolder)
 
+mainPageRouter.post('/updateFolder/:folderId/:subfolderId', mainPageController.updateFolder)
 module.exports = mainPageRouter

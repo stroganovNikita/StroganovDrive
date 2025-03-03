@@ -24,6 +24,11 @@
     gap: 5px;
     cursor: pointer;
 }
+.createFolderButton:disabled {
+  opacity: 0.6;
+  cursor: auto;
+}
+
 .createFolderButton span{
     font-size: 2.5rem;
 }
@@ -122,22 +127,26 @@
 .actionsSubFolder button:hover{
     background-color: rgb(119, 119, 119);
 }
-.dialogForCreateFolder {
+.dialogForCreateFolder,
+.dialogForUpdateFolder {
     background-color: rgb(83, 14, 148);
     border-radius: 20px;
     border: none;
     color: rgb(228, 216, 236);
 }
-.dialogForCreateFolder::backdrop {
+.dialogForCreateFolder::backdrop,
+.dialogForUpdateFolder::backdrop {
     background-color: rgb(0, 0, 0);
     opacity: 0.5;
 }
-.dialogForCreateFolder h2 {
+.dialogForCreateFolder h2,
+.dialogForUpdateFolder h2 {
     font-size: 2.5rem;
     text-align: center;
     margin: 0;
 }
-.dialogForCreateFolder input {
+.dialogForCreateFolder input,
+.dialogForUpdateFolder input {
     font-size: 1.5rem;
     margin: 1rem;
     padding: 10px;
@@ -148,7 +157,8 @@
     justify-content: center;
     gap: 15px;
 }
-.dialogForCreateFolder button {
+.dialogForCreateFolder button,
+.dialogForUpdateFolder button {
     font-size: 1.5rem;
     padding: 5px 10px;
     cursor: pointer

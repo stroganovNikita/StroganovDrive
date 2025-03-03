@@ -75,11 +75,27 @@ exports.handleSubfolder = async (req, res, next) => {
 };
 
 exports.moveFolderToTrash = async (req, res) => {
+  const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
   await (await db).moveFolderToTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId));
+  if (parentFolder.name == 'Personal') {
+    return res.redirect(`/folder/${req.params.folderId}`);
+  } else {
+    return res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+  }
 };
 
 exports.moveFolderFromTrash = async (req, res) => {
-  await (await db).moveFolderFromTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
+  try {
+    const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
+    await (await db).moveFolderFromTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
+    if (parentFolder.name == 'Personal') {
+      return res.redirect(`/folder/${req.params.folderId}`);
+    } else {
+      return res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+    }
+  } catch {
+    next(new CustomError("Error move, please write to the developer"))
+  }
 };
 
 exports.createNewFolder = async (req, res, next) => {
@@ -94,4 +110,18 @@ exports.createNewFolder = async (req, res, next) => {
  } catch {
    next(new CustomError("Error during creation, please write to the developer"))
  }
+};
+
+exports.updateFolder = async (req, res, next) => {
+  try {
+      const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
+      await (await db).updateFolderNameDB(Number(req.params.subfolderId), req.user.id, req.body.newName);
+      if (parentFolder.name == 'Personal') {
+        return res.redirect(`/folder/${req.params.folderId}`);
+      } else {
+        return res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+      }
+  } catch {
+    next(new CustomError("Error during update, please write to the developer"))
+  }
 };
