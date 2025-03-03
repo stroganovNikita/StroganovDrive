@@ -1,5 +1,12 @@
 <section class="foldersSection">
-  <% if (locals.folder) { %>    
+  <h2 class="folderPath"><a href="/folder/<%=locals.currentFolder%>">/</a>
+  <% if (locals.path) { %>
+    <%path.map((item) => { %>
+      > <a href="/folder/<%=locals.currentFolder%>/subfolder/<%=item.split(' ')[0]%>"><%=item.split(' ')[1]%></a>
+    <% }) %>
+  <% } %>
+  </h2>
+  <% if (locals.folder.length > 0) { %>    
   <% locals.folder.map((folder) => { %>
     <div class="primaryDivForSubFolder">
     <% if (locals.folders[0].id == locals.currentFolder) { %>
@@ -34,6 +41,8 @@
       </a> 
     </div>
       <% }) %>
+    <%} else {%>
+      <h2 class="emptyDirectory">Directory is empty</h2>
     <% } %>
 </section>
 <script>

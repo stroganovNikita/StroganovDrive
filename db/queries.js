@@ -157,6 +157,41 @@ async function getParentFolderDB(folderId, userId) {
   return parentFolder
 };
 
+async function getAllUserFolderDB(userId) {
+  const folders = await prisma.folder.findMany({
+    where: {
+      authorId: 1
+    }
+  })
+
+return folders
+};
+   
+async function pathToRootDB(neededPath) {
+  const test = await getAllUserFolderDB();
+  let counter = 0;
+  let prevParentFolder = 0;
+  const total = [];
+
+    while(prevParentFolder !== null) {
+      if (counter >= test.length) counter = 0;
+      if (test.length == 0) return
+      if (test[counter].id == prevParentFolder) {
+          prevParentFolder = test[counter].parentFolder
+          total.push(test[counter])
+          test.splice(counter, 1)
+      }
+      if (test[counter].id == neededPath) {
+        prevParentFolder = test[counter].parentFolder
+        total.push(test[counter]);
+        test.splice(counter, 1)
+      }
+      counter++
+    }
+    const names = total.map((item) => item.id + " " + item.name);
+    return names.reverse()
+  };
+
 
 export { 
   signUpQueryDB, 
@@ -168,27 +203,7 @@ export {
   moveFolderFromTrashDB,
   createNewFolderDB,
   getParentFolderDB,
-  updateFolderNameDB
+  updateFolderNameDB,
+  pathToRootDB
 }
 
-
-//  const check = await prisma.folder.update({
-//     where: {
-//        id: 3
-//     },
-//     data: {
-//       childFolder: {
-//         create: {
-//           name: 'XSS3', authorId: 1 
-//         }
-//       }
-//     }
-// })
- 
-// const check = await prisma.folder.findMany({
-//   include: {
-//     childFolder: true
-//   }
-// });
-
-// console.log(check)   

@@ -109,14 +109,17 @@
     justify-content: center;
     gap: 35px;
     margin: 0;
+    margin-top: 30px;
     margin-right: 5px;
 }
-.actionsSubFolder button{
+.actionsSubFolder button,
+.buttonForCreateFolder button{
     background-color: rgb(60, 3, 112);
     color: rgb(228, 216, 236);
     font-size: 0.9rem;
     border: none;
     border-radius: 10px;
+    transition: 0.1s background-color;
     padding: 1px 7px;
     cursor: pointer;
 }
@@ -124,7 +127,8 @@
     width: 0.9rem;
     fill: rgb(228, 216, 236);
 }
-.actionsSubFolder button:hover{
+.actionsSubFolder button:hover,
+.buttonForCreateFolder button:hover{
     background-color: rgb(119, 119, 119);
 }
 .dialogForCreateFolder,
@@ -189,4 +193,27 @@
 }
 .primaryDivForSubFolder:hover .restoreFolderBtn {
     visibility: visible;
+}
+.folderPath {
+    position: absolute;
+    color: rgb(228, 216, 236);
+    top: 13%;
+    left: 24%;
+}
+.folderPath a {
+    color: rgb(227, 227, 227);
+    border-bottom: 2px solid rgb(227, 227, 227);;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: color 0.2s;
+}
+.folderPath a:hover {
+    color: rgb(193, 193, 193);
+}
+.emptyDirectory {
+    position: absolute;
+    color: rgb(178, 72, 249);
+    font-size: 2.3rem;
+    top: 40%;
+    left: 50%
 }
