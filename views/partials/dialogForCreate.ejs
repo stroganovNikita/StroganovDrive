@@ -1,7 +1,7 @@
 <dialog class="dialogForCreateFolder" >
     <h2>New folder</h2>
     <form action="/newFolder/<%=locals.currentFolder%>/<%=locals.currentSubfolder || 'none'%>" method="POST">
-      <input type="text" name="newFolder" id="newFolder">
+      <input type="text" name="newFolder" id="newFolder" maxlength = "15">
       <div class="buttonForCreateFolder">
           <button type="submit">Create</button>
           <button type="button" class="cancelButtonForCreate">Cancel</button>

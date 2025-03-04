@@ -13,14 +13,24 @@
     margin-left: 1rem;
 }
 
-.createFolderButton {
+.divForBtnUploadAndCreate {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    justify-self: center;
-    background-color: rgb(83, 14, 148);
+} 
+
+.createFolderButton,
+.uploadFileButton {
+    display: flex;
+    align-items: center;
+    border: none;
+    border: 1px solid rgb(201, 201, 201);
+    background-color: rgb(73, 13, 130);
+    transition: transform 0.2s;
     color: rgb(228, 216, 236);
-    border-radius: 30px;
+    border-radius: 5px;
+    width: 65%;
     padding: 5px 15px;
     margin-top: 1rem;
     font-size: 1rem;
@@ -28,13 +38,21 @@
     cursor: pointer;
 }
 
-.createFolderButton:disabled {
+.createFolderButton:hover,
+.uploadFileButton:hover {
+    transform: translateY(-2px);
+}
+
+.createFolderButton:disabled,
+.uploadFileButton:disabled {
     opacity: 0.6;
     cursor: auto;
 }
 
-.createFolderButton span {
-    font-size: 2.5rem;
+.createFolderButton svg,
+.uploadFileButton svg {
+    fill: rgb(228, 216, 236);
+    width: 1.5rem
 }
 
 .primaryFolders {

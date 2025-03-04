@@ -3,7 +3,15 @@ const mainPageRouter = express.Router();
 const mainPageController = require('../controllers/mainPageController');
 const passport = require('passport');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/'});
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads')
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage });
 
 mainPageRouter.get('/', mainPageController.handleMainPage);
 
@@ -25,9 +33,7 @@ mainPageRouter.get('/logOut', (req, res) => {
     res.redirect('/');
 })
 
-mainPageRouter.post('/upload', upload.single('file'), (req, res) => {
-  res.redirect('/')
-})
+mainPageRouter.post('/upload/:folderId/:subfolderId', upload.single('file'), mainPageController.uploadFile)
 
 mainPageRouter.get('/folder/:id', mainPageController.handleFolder);
 

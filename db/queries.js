@@ -44,10 +44,11 @@ async function handleFolderDB(id) {
       parentFolder: null
     },
     include: {
-      childFolder: true
+      childFolder: true,
+      file: true
     }
   })
-  return folder[0].childFolder
+  return folder[0]
 };
 
 async function handleSubfolderDB(id) {
@@ -56,10 +57,10 @@ async function handleSubfolderDB(id) {
       id: id
     },
     include: {
-      childFolder: true
+      childFolder: true,
     }
   })
-  return folder[0].childFolder
+  return folder[0]
 };
 
 async function moveFolderToTrashDB(id, userId, parentFolder) {
@@ -176,7 +177,6 @@ async function pathToRootDB(neededPath) {
     while(prevParentFolder !== null) {
       if (counter - 1 >= test.length) counter = 0;
       if (test.length == 0) return;
-      console.log(counter, test.length)
       if (test[counter].id == prevParentFolder) {
           prevParentFolder = test[counter].parentFolder
           total.push(test[counter])
@@ -193,12 +193,28 @@ async function pathToRootDB(neededPath) {
     }
     const names = total.map((item) => item.id + " " + item.name);
     return names.reverse()
-  };
+};
+
+async function uploadFileDB(folderId, userId, file) {
+  await prisma.folder.update({
+    where: {
+    id: folderId,
+    authorId: userId
+  },
+    data: {
+      file: {
+        create: {
+          name: file.filename,
+          size: file.size,
+          date: new Date()
+        }
+      }
+    }
+  });
+}
 
 
 
-const test = await pathToRootDB(44)
-console.log(test)
 
 export { 
   signUpQueryDB, 
@@ -211,6 +227,15 @@ export {
   createNewFolderDB,
   getParentFolderDB,
   updateFolderNameDB,
-  pathToRootDB
+  pathToRootDB,
+  uploadFileDB
 }
 
+const check = await prisma.folder.findMany({
+  where: {
+    id: 3
+  },
+  include: {
+    file: true
+  }
+});

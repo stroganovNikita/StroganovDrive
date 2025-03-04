@@ -1,0 +1,8 @@
+<dialog class="dialogForUploadFile" >
+    <h2>File upload</h2>
+        <form action="/upload/<%=locals.currentFolder%>/<%=locals.currentSubfolder || 'none'%>" method="POST" enctype="multipart/form-data" class="uploadForm">
+            <input type="file" name="file">
+            <button type="submit" class="testim">Submit</button>
+            <button type="button" class="cancelButtonForUpload">Cancel</button>
+        </form>
+</dialog>

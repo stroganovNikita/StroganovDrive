@@ -2,6 +2,8 @@ const { validationResult } = require('express-validator');
 const { signUpValidator, logInValidator } = require('./validator');
 const CustomError = require('../errors/customError.js');
 const db = import('../db/queries.js');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 exports.handleMainPage = async (req, res) => {
   if (req.isAuthenticated()) {
@@ -55,7 +57,8 @@ exports.handleFolder = async (req, res, next) => {
     const folders = await (await db).handleFolderDB(Number(req.params.id));
     res.locals.currentUser = req.user;
     res.locals.currentFolder = req.params.id;
-    return res.render('mainPageAuth', { folders: primaryFolders, folder: folders });
+    console.log(folders)
+    return res.render('mainPageAuth', { folders: primaryFolders, folder: folders.childFolder, file: folders.file });
   } catch {
     next(new CustomError("Page not found. Maybe no such folder"))
   }
@@ -65,15 +68,14 @@ exports.handleSubfolder = async (req, res, next) => {
   try {
     const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
     const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId));
-    console.log(req.params.subfolderId)
     const path = await (await db).pathToRootDB(Number(req.params.subfolderId));
     res.locals.currentUser = req.user;
     res.locals.currentFolder = req.params.folderId;
     res.locals.currentSubfolder = req.params.subfolderId;
-    return res.render('mainPageAuth', { folders: primaryFolders, folder: folders, path: path.splice(1) });
-  } catch(err) {
-    console.log(err)
-    // next(new CustomError("Page not found. Maybe no such folder"))
+    console.log(primaryFolders)
+    return res.render('mainPageAuth', { folders: primaryFolders, folder: folders.childFolder, file: folders.file ,path: path.splice(1) });
+  } catch {
+    next(new CustomError("Page not found. Maybe no such folder"))
   }
 };
 
@@ -81,9 +83,9 @@ exports.moveFolderToTrash = async (req, res) => {
   const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
   await (await db).moveFolderToTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId));
   if (parentFolder.name == 'Personal') {
-    return res.redirect(`/folder/${req.params.folderId}`);
+    res.redirect(`/folder/${req.params.folderId}`);
   } else {
-    return res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+    res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
   }
 };
 
@@ -92,9 +94,9 @@ exports.moveFolderFromTrash = async (req, res) => {
     const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
     await (await db).moveFolderFromTrashDB(Number(req.params.subfolderId), req.user.id, Number(req.params.folderId))
     if (parentFolder.name == 'Personal') {
-      return res.redirect(`/folder/${req.params.folderId}`);
+      res.redirect(`/folder/${req.params.folderId}`);
     } else {
-      return res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+      res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
     }
   } catch {
     next(new CustomError("Error move, please write to the developer"))
@@ -120,11 +122,25 @@ exports.updateFolder = async (req, res, next) => {
     const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
     await (await db).updateFolderNameDB(Number(req.params.subfolderId), req.user.id, req.body.newName);
     if (parentFolder.name == 'Personal') {
-      return res.redirect(`/folder/${req.params.folderId}`);
+      res.redirect(`/folder/${req.params.folderId}`);
     } else {
-      return res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+      res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
     }
   } catch {
     next(new CustomError("Error during update, please write to the developer"))
+  }
+};
+
+exports.uploadFile = async (req, res, next) => {
+  try {
+    if (req.params.subfolderId == 'none') { 
+      await (await db).uploadFileDB(Number(req.params.folderId), req.user.id, req.file)
+      res.redirect(`/folder/${req.params.folderId}`);
+    } else {
+      await (await db).uploadFileDB(Number(req.params.subfolderId), req.user.id, req.file)
+      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+    } 
+  } catch {
+      next(new CustomError("Error during upload, please write to the developer"))
   }
 };

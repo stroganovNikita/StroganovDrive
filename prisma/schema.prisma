@@ -32,5 +32,6 @@ model File {
   name     String   @db.VarChar(255)
   folder   Folder   @relation(fields: [folderId], references: [id])
   folderId Int
+  size     Int
   date     DateTime
 }

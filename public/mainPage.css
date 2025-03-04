@@ -22,8 +22,12 @@ body {
 
 .buttonsNav {
     display: flex;
-    margin-right: 3rem;
+    margin-right: 2rem;
     gap: 30px;
+}
+.buttonsNav svg {
+    width: 2rem;
+    fill: rgb(139, 76, 198)
 }
 
 .buttonsNav button {
