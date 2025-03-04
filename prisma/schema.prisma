@@ -8,20 +8,29 @@ generator client {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   firstName String
   lastName  String
-  nickName  String @db.VarChar(255)
-  password  String @db.VarChar(255)
-  folder Folder[]
+  nickName  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  folder    Folder[]
 }
 
 model Folder {
-  id Int @id @default(autoincrement())
-  name String
+  id           Int      @id @default(autoincrement())
+  name         String
   parentFolder Int?
-  folder Folder? @relation("relationFolders", fields: [parentFolder], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  childFolder Folder[] @relation("relationFolders") 
-  author User @relation(fields: [authorId], references: [id])
-  authorId Int
+  folder       Folder?  @relation("relationFolders", fields: [parentFolder], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  childFolder  Folder[] @relation("relationFolders")
+  file         File[]
+  author       User     @relation(fields: [authorId], references: [id])
+  authorId     Int
+}
+
+model File {
+  id       Int      @id @default(autoincrement())
+  name     String   @db.VarChar(255)
+  folder   Folder   @relation(fields: [folderId], references: [id])
+  folderId Int
+  date     DateTime
 }

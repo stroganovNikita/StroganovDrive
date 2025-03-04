@@ -174,24 +174,31 @@ async function pathToRootDB(neededPath) {
   const total = [];
 
     while(prevParentFolder !== null) {
-      if (counter >= test.length) counter = 0;
-      if (test.length == 0) return
+      if (counter - 1 >= test.length) counter = 0;
+      if (test.length == 0) return;
+      console.log(counter, test.length)
       if (test[counter].id == prevParentFolder) {
           prevParentFolder = test[counter].parentFolder
           total.push(test[counter])
           test.splice(counter, 1)
       }
+      if (counter >= test.length) counter=0;
       if (test[counter].id == neededPath) {
         prevParentFolder = test[counter].parentFolder
         total.push(test[counter]);
         test.splice(counter, 1)
       }
       counter++
+      if (counter >= test.length) counter=0;
     }
     const names = total.map((item) => item.id + " " + item.name);
     return names.reverse()
   };
 
+
+
+const test = await pathToRootDB(44)
+console.log(test)
 
 export { 
   signUpQueryDB, 
