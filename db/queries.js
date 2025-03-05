@@ -162,7 +162,7 @@ async function getParentFolderDB(folderId, userId) {
 async function getAllUserFolderDB(userId) {
   const folders = await prisma.folder.findMany({
     where: {
-      authorId: 1
+      authorId: userId
     }
   })
 
