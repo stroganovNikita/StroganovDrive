@@ -3,6 +3,7 @@ const { signUpValidator, logInValidator } = require('./validator');
 const CustomError = require('../errors/customError.js');
 const db = import('../db/queries.js');
 const multer = require('multer');
+const path = require('node:path');
 const upload = multer({ dest: 'uploads/' });
 
 exports.handleMainPage = async (req, res) => {
@@ -173,5 +174,15 @@ exports.restoreFile = async (req, res, next) => {
     } 
   } catch {
     next(new CustomError('Oops, something wont wrong. Write please to the developer'))
+  }
+};
+
+exports.downloadFile = async (req, res, next) => {
+  try {
+    console.log(__dirname)
+    const file = path.join(__dirname + '\\..\\uploads', req.params.fileName)
+    res.download(file)
+  } catch {
+    next(new CustomError('Oops, something wont wrong. Write please to the developer'));
   }
 };

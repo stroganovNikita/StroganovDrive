@@ -61,7 +61,9 @@
               <p><%=Number(file.size/1000/1000).toFixed(3)%> Mb</p>
               <h2>Upload time:</h2>
               <p><%=file.date.toLocaleString()%></p>
-              <button class="downloadFileBtn">Download</button>
+              <form action="/download/<%=file.name%>" method="POST">
+                <button class="downloadFileBtn">Download</button>
+              </form>
             </div>
           <!-- </form> -->
         <% } else { %>

@@ -54,4 +54,6 @@ mainPageRouter.post('/updateFolder/:folderId/:subfolderId', mainPageController.u
 mainPageRouter.post('/deleteFile/:folderId/:subfolderId/:fileId', mainPageController.deleteFile);
 
 mainPageRouter.post('/restoreFile/:folderId/:subfolderId/:fileId', mainPageController.restoreFile);
+
+mainPageRouter.post('/download/:fileName', mainPageController.downloadFile);
 module.exports = mainPageRouter
