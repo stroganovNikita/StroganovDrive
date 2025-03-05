@@ -51,9 +51,19 @@
 
       <div class="divFormRestoreFolder">
         <% if (locals.folders[0].id == locals.currentFolder) { %>
-          <form class="formRestoreFolder" action="/infoAboutFile/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
-            <button class="restoreFolderBtn">Info</button>
-          </form>
+          <!-- <form class="formRestoreFolder" action="/infoAboutFile/<%=currentFolder%>/<%=folder.id%>" method="POST" >  -->
+            <button class="restoreFolderBtn infoAboutFileBtn">Info</button>
+            <div class="infoAboutFileDiv">
+              <div class="closeInfoAboutFile">X</div>
+              <h2>Name:</h2>
+              <p><%=file.name%></p>
+              <h2>Size: </h2>
+              <p><%=Number(file.size/1000/1000).toFixed(3)%> Mb</p>
+              <h2>Upload time:</h2>
+              <p><%=file.date.toLocaleString()%></p>
+              <button class="downloadFileBtn">Download</button>
+            </div>
+          <!-- </form> -->
         <% } else { %>
           <form class="formRestoreFolder" action="/restoreFile/<%=currentFolder%>/<%=locals.currentSubfolder || 'none'%>/<%=file.id%>" method="POST" > 
             <button class="restoreFolderBtn">Restore</button>
@@ -83,7 +93,23 @@
 </section>
 <script>
   const formEditFolder = document.querySelectorAll('.formEditFolder');
-  const cancelFormEdit = document.querySelectorAll('.cancelButtonForUpdate')
+  const cancelFormEdit = document.querySelectorAll('.cancelButtonForUpdate');
+  const infoAboutFileBtn = document.querySelectorAll('.infoAboutFileBtn');
+  const closeInfoAboutFile = document.querySelectorAll('.closeInfoAboutFile');
+
+  closeInfoAboutFile.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('visibleFileInfo')
+    })
+  });
+
+  infoAboutFileBtn.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const divInfoAboutFile = btn.nextElementSibling;
+      divInfoAboutFile.classList.toggle('visibleFileInfo');
+   });
+  });
+
   formEditFolder.forEach((btn) => {
     const dialog = btn.nextElementSibling
     btn.addEventListener('click', () => {

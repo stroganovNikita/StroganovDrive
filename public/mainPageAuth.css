@@ -278,3 +278,43 @@
     top: 40%;
     left: 50%
 }
+.infoAboutFileDiv {
+    display: none;
+    position: absolute;
+    background-color: rgb(72, 72, 72);
+    width: 20%;
+    right: 0;
+    padding: 10px;
+    top: 0;
+    bottom: 0;
+}
+.infoAboutFileDiv h2 {
+    color: rgb(234, 234, 234);
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.infoAboutFileDiv p {
+    color: rgb(234, 234, 234);
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.visibleFileInfo {
+  display: block;
+}
+.closeInfoAboutFile {
+  display: flex;
+  justify-self: end;
+  background-color: rgb(60, 3, 112);
+  color: rgb(228, 216, 236);
+  width: max-content;
+  transition: background-color 0.2s;
+  padding: 2px 5px;
+  font-size: 1rem;
+  border-radius: 40%;
+  cursor: pointer;
+}
+.closeInfoAboutFile:hover {
+  background-color: rgb(84, 25, 139);
+}
