@@ -30,7 +30,7 @@ model Folder {
 model File {
   id       Int      @id @default(autoincrement())
   name     String   @db.VarChar(255)
-  folder   Folder   @relation(fields: [folderId], references: [id])
+  folder   Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId Int
   size     Int
   date     DateTime

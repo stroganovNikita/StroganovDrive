@@ -89,10 +89,19 @@
 
 
 .subfolderDiv {
+    display: flex;
+    flex-direction: column;
+    max-width: 100px;
+    align-items: center;
     position: relative;
     width: max-content;
     height: max-content;
     margin: 10px;
+}
+.subfolderDiv p {
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .subfolderDiv svg {

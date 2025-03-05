@@ -58,6 +58,7 @@ async function handleSubfolderDB(id) {
     },
     include: {
       childFolder: true,
+      file: true,
     }
   })
   return folder[0]
