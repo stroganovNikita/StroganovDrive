@@ -57,7 +57,6 @@ exports.handleFolder = async (req, res, next) => {
     const folders = await (await db).handleFolderDB(Number(req.params.id));
     res.locals.currentUser = req.user;
     res.locals.currentFolder = req.params.id;
-    console.log(folders)
     return res.render('mainPageAuth', { folders: primaryFolders, folder: folders.childFolder, file: folders.file });
   } catch {
     next(new CustomError("Page not found. Maybe no such folder"))
@@ -141,6 +140,38 @@ exports.uploadFile = async (req, res, next) => {
       res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
     } 
   } catch {
-      next(new CustomError("Error during upload, please write to the developer"))
+      next(new CustomError("Error during upload, please write to the developer"));
+  }
+};
+
+exports.deleteFile = async (req, res, next) => {
+  try {
+    const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
+    await (await db).deleteFileDB(Number(req.params.fileId), primaryFolders[1].id);
+    if (req.params.subfolderId == 'none') {
+      res.redirect(`/folder/${req.params.folderId}`)
+    } else {
+      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+    }
+  } catch {
+    next(new CustomError('Error during delete file, please write to the developer'));
+  }
+};
+
+exports.restoreFile = async (req, res, next) => {
+  try {
+    const parentFolderForFile = await (await db).getParentFolderForFileDB(Number(req.params.fileId));
+    const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
+
+    if(primaryFolders[1].id == parentFolderForFile.folderId) {
+      await (await db).restoreFileDB(Number(req.params.fileId), primaryFolders[0].id);
+      if (req.params.subfolderId == 'none') {
+        res.redirect(`/folder/${req.params.folderId}`);
+      } else {
+        res.redirect(`/folder/${req.params.folderId}/subfolderId/${req.params.subfolderId}`);
+      }
+    } 
+  } catch {
+    next(new CustomError('Oops, something wont wrong. Write please to the developer'))
   }
 };

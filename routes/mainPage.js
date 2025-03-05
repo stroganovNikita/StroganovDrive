@@ -47,7 +47,11 @@ mainPageRouter.post('/folder/:folderId/newFolder', (req, res) => {
     console.log("test")
 })
 
-mainPageRouter.post('/newFolder/:folderId/:subfolderId', mainPageController.createNewFolder)
+mainPageRouter.post('/newFolder/:folderId/:subfolderId', mainPageController.createNewFolder);
 
-mainPageRouter.post('/updateFolder/:folderId/:subfolderId', mainPageController.updateFolder)
+mainPageRouter.post('/updateFolder/:folderId/:subfolderId', mainPageController.updateFolder);
+
+mainPageRouter.post('/deleteFile/:folderId/:subfolderId/:fileId', mainPageController.deleteFile);
+
+mainPageRouter.post('/restoreFile/:folderId/:subfolderId/:fileId', mainPageController.restoreFile);
 module.exports = mainPageRouter

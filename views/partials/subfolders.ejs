@@ -50,10 +50,16 @@
     <div class="primaryDivForSubFolder">
 
       <div class="divFormRestoreFolder">
-        <form class="formRestoreFolder" action="/restore/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
-          <button class="restoreFolderBtn">Restore</button>
-        </form>
-        <form class="formRestoreFolder" action="/delete/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
+        <% if (locals.folders[0].id == locals.currentFolder) { %>
+          <form class="formRestoreFolder" action="/infoAboutFile/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
+            <button class="restoreFolderBtn">Info</button>
+          </form>
+        <% } else { %>
+          <form class="formRestoreFolder" action="/restoreFile/<%=currentFolder%>/<%=locals.currentSubfolder || 'none'%>/<%=file.id%>" method="POST" > 
+            <button class="restoreFolderBtn">Restore</button>
+          </form>
+        <% } %>
+        <form class="formRestoreFolder" action="/deleteFile/<%=currentFolder%>/<%=locals.currentSubfolder || 'none'%>/<%=file.id%>" method="POST" > 
           <button class="restoreFolderBtn">X</button>
         </form>
       </div>

@@ -214,7 +214,48 @@ async function uploadFileDB(folderId, userId, file) {
   });
 }
 
+async function deleteFileDB(fileId, recentlyDeletedFolderId) {
+  const check = await prisma.file.findUnique({
+    where: {
+      id: fileId
+    }
+  });
+  if (check.folderId == recentlyDeletedFolderId) {
+    await prisma.file.delete({
+      where: {
+        id: fileId
+      }
+    })
+  } else {
+  await prisma.file.update({
+    where: {
+      id: fileId,
+    },
+    data: {
+      folderId: recentlyDeletedFolderId,
+    }
+  })
+ }
+};
 
+async function getParentFolderForFileDB(fileId) {
+  return await prisma.file.findUnique({
+    where: {
+      id: fileId
+    }
+  });
+};
+
+async function restoreFileDB(fileId, personalFolderId) {
+  await prisma.file.update({
+    where: {
+      id: fileId
+    },
+    data: {
+      folderId: personalFolderId
+    }
+  })
+};
 
 
 export { 
@@ -229,14 +270,17 @@ export {
   getParentFolderDB,
   updateFolderNameDB,
   pathToRootDB,
-  uploadFileDB
+  uploadFileDB,
+  deleteFileDB,
+  getParentFolderForFileDB,
+  restoreFileDB
 }
 
-const check = await prisma.folder.findMany({
-  where: {
-    id: 3
-  },
-  include: {
-    file: true
-  }
-});
+// const check = await prisma.folder.findMany({
+//   where: {
+//     id: 3
+//   },
+//   include: {
+//     file: true
+//   }
+// });
