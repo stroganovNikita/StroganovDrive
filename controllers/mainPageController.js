@@ -1,10 +1,9 @@
 const { validationResult } = require('express-validator');
 const { signUpValidator, logInValidator } = require('./validator');
+const { supabaseUploadFile, supabaseDownloadFile } = require('../configure/supabase.js')
+const { transliterateFn } = require('../simpleJs/transliterate.js');
 const CustomError = require('../errors/customError.js');
 const db = import('../db/queries.js');
-const multer = require('multer');
-const path = require('node:path');
-const upload = multer({ dest: 'uploads/' });
 
 exports.handleMainPage = async (req, res) => {
   if (req.isAuthenticated()) {
@@ -72,7 +71,6 @@ exports.handleSubfolder = async (req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.currentFolder = req.params.folderId;
     res.locals.currentSubfolder = req.params.subfolderId;
-    console.log(primaryFolders)
     return res.render('mainPageAuth', { folders: primaryFolders, folder: folders.childFolder, file: folders.file ,path: path.splice(1) });
   } catch {
     next(new CustomError("Page not found. Maybe no such folder"))
@@ -131,19 +129,6 @@ exports.updateFolder = async (req, res, next) => {
   }
 };
 
-exports.uploadFile = async (req, res, next) => {
-  try {
-    if (req.params.subfolderId == 'none') { 
-      await (await db).uploadFileDB(Number(req.params.folderId), req.user.id, req.file)
-      res.redirect(`/folder/${req.params.folderId}`);
-    } else {
-      await (await db).uploadFileDB(Number(req.params.subfolderId), req.user.id, req.file)
-      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
-    } 
-  } catch {
-      next(new CustomError("Error during upload, please write to the developer"));
-  }
-};
 
 exports.deleteFile = async (req, res, next) => {
   try {
@@ -177,12 +162,38 @@ exports.restoreFile = async (req, res, next) => {
   }
 };
 
+exports.uploadFile = async (req, res, next) => {
+  req.file.originalname = Buffer.from(req.file.originalname, 'latin1').toString('utf8')
+  try {
+    if (req.params.subfolderId == 'none') { 
+      if (req.file.size/1000/1000 > 15) {
+        next(new CustomError('Error, maximum file size 15 mb'))
+      }
+      await (await db).uploadFileDB(Number(req.params.folderId), req.user.id, req.file)
+      const transliterate = transliterateFn(req.file.originalname)
+      req.file.originalname = transliterate
+      await supabaseUploadFile(req.file, req.user.nickName)
+      res.redirect(`/folder/${req.params.folderId}`);
+    } else {
+      await (await db).uploadFileDB(Number(req.params.subfolderId), req.user.id, req.file)
+      await supabaseUploadFile(req.file, req.user.nickName)
+      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+    } 
+  } catch {
+      next(new CustomError("Error during upload, please write to the developer"));
+  }
+};
+
+
 exports.downloadFile = async (req, res, next) => {
   try {
-    console.log(__dirname)
-    const file = path.join(__dirname + '\\..\\uploads', req.params.fileName)
-    res.download(file)
-  } catch {
+
+    const transliterate = transliterateFn(req.params.fileName)
+    req.params.fileName = transliterate
+    const data = await supabaseDownloadFile(req.params.fileName, req.user.nickName)
+    res.send(data)
+  } catch(err) {
+    console.log(err)
     next(new CustomError('Oops, something wont wrong. Write please to the developer'));
   }
 };

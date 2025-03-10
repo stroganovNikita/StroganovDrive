@@ -3,14 +3,7 @@ const mainPageRouter = express.Router();
 const mainPageController = require('../controllers/mainPageController');
 const passport = require('passport');
 const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './uploads')
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname)
-    }
-})
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 mainPageRouter.get('/', mainPageController.handleMainPage);
@@ -56,4 +49,5 @@ mainPageRouter.post('/deleteFile/:folderId/:subfolderId/:fileId', mainPageContro
 mainPageRouter.post('/restoreFile/:folderId/:subfolderId/:fileId', mainPageController.restoreFile);
 
 mainPageRouter.post('/download/:fileName', mainPageController.downloadFile);
+
 module.exports = mainPageRouter

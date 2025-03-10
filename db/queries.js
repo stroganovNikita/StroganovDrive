@@ -205,7 +205,7 @@ async function uploadFileDB(folderId, userId, file) {
     data: {
       file: {
         create: {
-          name: file.filename,
+          name: file.originalname,
           size: file.size,
           date: new Date()
         }
