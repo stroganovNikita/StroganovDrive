@@ -27,7 +27,7 @@
     border: none;
     border: 1px solid rgb(201, 201, 201);
     background-color: rgb(73, 13, 130);
-    transition: transform 0.2s;
+    transition: background-color 0.2s;
     color: rgb(228, 216, 236);
     border-radius: 5px;
     width: 65%;
@@ -40,7 +40,7 @@
 
 .createFolderButton:hover,
 .uploadFileButton:hover {
-    transform: translateY(-2px);
+    background-color: rgb(88, 26, 145);
 }
 
 .createFolderButton:disabled,
@@ -291,19 +291,62 @@
 }
 .infoAboutFileDiv h2 {
     color: rgb(234, 234, 234);
-    font-size: 1rem;
+    font-size: 1.3rem;
+    margin-top: 1.2rem;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 .infoAboutFileDiv p {
     color: rgb(234, 234, 234);
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 .visibleFileInfo {
   display: block;
+  animation: appearWidth 0.2s;
 }
+
+.visibleFileInfo button {
+    background-color: rgb(73, 13, 130);
+    color: rgb(228, 216, 236);
+    border: 1px solid rgb(201, 201, 201);
+    margin: auto;
+    margin-top: 3rem;
+    border-radius: 5px;
+    width: 65%;
+    padding: 5px 15px;
+    margin-top: 1rem;
+    font-size: 1rem;
+    gap: 5px;
+    text-align: center;
+    cursor: pointer;
+    animation: appearWidthBtn 0.2s both;
+    transition: background-color 0.2s;
+}
+.visibleFileInfo button:hover {
+    background-color: rgb(88, 26, 145);
+}
+@keyframes appearWidthBtn {
+    0%, 20% {
+        display: none;
+        font-size: 0;
+    }
+    100% {
+        display: block;
+        font-size: 1.2rem;
+    }
+}
+
+@keyframes appearWidth {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 20%;   
+    }
+}
+
 .closeInfoAboutFile {
   display: flex;
   justify-self: end;
@@ -318,4 +361,8 @@
 }
 .closeInfoAboutFile:hover {
   background-color: rgb(84, 25, 139);
+}
+
+.disabled:hover {
+    background-color: rgb(73, 13, 130);
 }

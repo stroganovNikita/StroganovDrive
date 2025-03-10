@@ -17,6 +17,7 @@ body {
     pointer-events: none;
 }
 .logo {
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -27,7 +28,8 @@ body {
 }
 .buttonsNav svg {
     width: 2rem;
-    fill: rgb(139, 76, 198)
+    fill: rgb(139, 76, 198);
+    transition: fill 0.2s;
 }
 
 .buttonsNav button {
@@ -45,6 +47,18 @@ body {
 .buttonsNav button:hover {
     transform: translateY(-1px);
 }
+.logOut {
+  transition: transform 0.1s, fill 0.1s;
+}
+.logOut:hover {
+  transform: translateX(2px);
+}
+
+.logOut:hover svg {
+  fill: rgb(160, 98, 217);
+}
+
+
 .signUpSection {
     display: flex;
     justify-content: center;

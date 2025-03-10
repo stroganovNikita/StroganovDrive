@@ -28,7 +28,7 @@
           <button class="restoreFolderBtn">Restore</button>
         </form>
         <form class="formRestoreFolder" action="/delete/<%=currentFolder%>/<%=folder.id%>" method="POST" > 
-          <button class="restoreFolderBtn">X</button>
+          <button class="restoreFolderBtn" onclick="return confirm('Deleted files cannot be recovered')">X</button>
         </form>
       </div>
     <% } %>
@@ -51,7 +51,6 @@
 
       <div class="divFormRestoreFolder">
         <% if (locals.folders[0].id == locals.currentFolder) { %>
-          <!-- <form class="formRestoreFolder" action="/infoAboutFile/<%=currentFolder%>/<%=folder.id%>" method="POST" >  -->
             <button class="restoreFolderBtn infoAboutFileBtn">Info</button>
             <div class="infoAboutFileDiv">
               <div class="closeInfoAboutFile">X</div>
@@ -65,7 +64,6 @@
                 <button class="downloadFileBtn">Download</button>
               </form>
             </div>
-          <!-- </form> -->
         <% } else { %>
           <form class="formRestoreFolder" action="/restoreFile/<%=currentFolder%>/<%=locals.currentSubfolder || 'none'%>/<%=file.id%>" method="POST" > 
             <button class="restoreFolderBtn">Restore</button>
@@ -77,14 +75,14 @@
       </div>
 
 
-    <a href="/folder/<%=locals.currentFolder%>/subfolder/<%=folder.id%>" class="subfolderHref">
+    <span class="subfolderHref">
       <div class="subfolderDiv">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
         </svg>
         <p class="folderName"><%=file.name%></p>
       </div>
-    </a>
+    </span>
     </div> 
    <% }) %>
   <% } %>
