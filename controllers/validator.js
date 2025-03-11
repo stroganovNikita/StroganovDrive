@@ -31,5 +31,18 @@ exports.logInValidator = [
     body('password')
     .notEmpty().withMessage('Password not should be empty')
     .isLength({min: 8, max: 25}).withMessage('Passowrd should be minimum 8 character and maximum 25')
-  ]
+];
+
+exports.newFolderName = [
+  body('newFolder').trim()
+  .notEmpty().withMessage('Field not should be empty')
+  .isLength({min: 1, max: 15}).withMessage('Folder name should be minimum 1 character and maximum 15')
+];
+
+exports.newNameFolder = [
+  body('newName').trim()
+  .notEmpty().withMessage('Field not should be empty')
+  .isLength({min: 1, max: 15}).withMessage('Folder name should be minimum 1 character and maximum 15')
+];
+
   

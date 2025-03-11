@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
-const { signUpValidator, logInValidator } = require('./validator');
-const { supabaseUploadFile, supabaseDownloadFile, supabaseDeleteFile } = require('../configure/supabase.js')
+const { signUpValidator, logInValidator, newFolderName, newNameFolder } = require('./validator');
+const { supabaseUploadFile, supabaseDownloadFile } = require('../configure/supabase.js')
 const { transliterateFn } = require('../simpleJs/transliterate.js');
 const CustomError = require('../errors/customError.js');
 const db = import('../db/queries.js');
@@ -101,33 +101,66 @@ exports.moveFolderFromTrash = async (req, res) => {
   }
 };
 
-exports.createNewFolder = async (req, res, next) => {
-  try {
-    if (req.params.subfolderId == 'none') {
-      await (await db).createNewFolderDB(Number(req.params.folderId), req.user.id, req.body.newFolder);
-      res.redirect(`/folder/${req.params.folderId}`)
-    } else {
-      await (await db).createNewFolderDB(Number(req.params.subfolderId), req.user.id, req.body.newFolder);
-      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+exports.createNewFolder = [
+  newFolderName,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.locals.currentUser = req.user;
+      const folders = await (await db).getPrimaryFoldersDB(req.user.id);
+      return res.redirect(`/folder/${folders[0].id}`)
     }
-  } catch {
-    next(new CustomError("Error during creation, please write to the developer"))
+    try {
+      if (req.params.subfolderId == 'none') {
+        await (await db).createNewFolderDB(Number(req.params.folderId), req.user.id, req.body.newFolder);
+        res.redirect(`/folder/${req.params.folderId}`)
+      } else {
+        await (await db).createNewFolderDB(Number(req.params.subfolderId), req.user.id, req.body.newFolder);
+        res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+      }
+    } catch {
+      next(new CustomError("Error during creation, please write to the developer"))
+    }
   }
-};
+]
 
-exports.updateFolder = async (req, res, next) => {
-  try {
-    const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
-    await (await db).updateFolderNameDB(Number(req.params.subfolderId), req.user.id, req.body.newName);
-    if (parentFolder.name == 'Personal') {
-      res.redirect(`/folder/${req.params.folderId}`);
-    } else {
-      res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+exports.updateFolder = [
+  newNameFolder,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.locals.currentUser = req.user;
+      const folders = await (await db).getPrimaryFoldersDB(req.user.id);
+      return res.redirect(`/folder/${folders[0].id}`)
     }
-  } catch {
-    next(new CustomError("Error during update, please write to the developer"))
+    try {
+      const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
+      await (await db).updateFolderNameDB(Number(req.params.subfolderId), req.user.id, req.body.newName);
+      if (parentFolder.name == 'Personal') {
+        res.redirect(`/folder/${req.params.folderId}`);
+      } else {
+        res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+      }
+    } catch {
+      next(new CustomError("Error during update, please write to the developer"))
+    }
   }
-};
+]
+
+
+// exports.updateFolder = async (req, res, next) => {
+//   try {
+//     const parentFolder = await (await db).getParentFolderDB(Number(req.params.subfolderId, req.user.id));
+//     await (await db).updateFolderNameDB(Number(req.params.subfolderId), req.user.id, req.body.newName);
+//     if (parentFolder.name == 'Personal') {
+//       res.redirect(`/folder/${req.params.folderId}`);
+//     } else {
+//       res.redirect(`/folder/${req.params.folderId}/subfolder/${parentFolder.id}`)
+//     }
+//   } catch {
+//     next(new CustomError("Error during update, please write to the developer"))
+//   }
+// };
 
 
 exports.deleteFile = async (req, res, next) => {

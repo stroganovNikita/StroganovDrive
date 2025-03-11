@@ -2,7 +2,7 @@
 <dialog class="dialogForUpdateFolder" >
     <h2>New folder name</h2>
     <form action="/updateFolder/<%=locals.currentFolder%>/<%=locals.folder.id || 'none'%>" method="POST">
-      <input type="text" name="newName" id="newName" value="<%=locals.folder.name%>">
+      <input type="text" name="newName" id="newName" value="<%=locals.folder.name%>" maxlength="15" required />
       <div class="buttonForCreateFolder">
           <button type="submit">Update</button>
           <button type="button" class="cancelButtonForUpdate">Cancel</button>

@@ -141,6 +141,7 @@
 }
 
 .primaryDivForSubFolder:hover .actionsSubFolder {
+    animation: appearBtn 0.3s both;
     visibility: visible;
 }
 
@@ -179,28 +180,49 @@
 }
 
 .dialogForCreateFolder,
-.dialogForUpdateFolder {
+.dialogForUpdateFolder,
+.dialogForUploadFile {
     background-color: rgb(83, 14, 148);
     border-radius: 20px;
     border: none;
     color: rgb(228, 216, 236);
 }
+.dialogForUpdateFolder[open],
+.dialogForUploadFile[open],
+.dialogForCreateFolder[open] {
+    animation: dialogAppear 0.3s both normal;
+}
+
+@keyframes dialogAppear {
+    0%{ 
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 
 .dialogForCreateFolder::backdrop,
-.dialogForUpdateFolder::backdrop {
+.dialogForUpdateFolder::backdrop,
+.dialogForUploadFile::backdrop {
     background-color: rgb(0, 0, 0);
     opacity: 0.5;
 }
 
 .dialogForCreateFolder h2,
-.dialogForUpdateFolder h2 {
+.dialogForUpdateFolder h2,
+.dialogForUploadFile h2 {
     font-size: 2.5rem;
     text-align: center;
     margin: 0;
 }
 
 .dialogForCreateFolder input,
-.dialogForUpdateFolder input {
+.dialogForUpdateFolder input,
+.dialogForUploadFile input {
     font-size: 1.5rem;
     margin: 1rem;
     padding: 10px;
@@ -214,7 +236,8 @@
 }
 
 .dialogForCreateFolder button,
-.dialogForUpdateFolder button {
+.dialogForUpdateFolder button,
+.dialogForUploadFile button {
     font-size: 1.5rem;
     padding: 5px 10px;
     cursor: pointer
@@ -250,7 +273,19 @@
 }
 
 .primaryDivForSubFolder:hover .restoreFolderBtn {
+    animation: appearBtn 0.3s both;
     visibility: visible;
+}
+
+@keyframes appearBtn{
+    0%{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(-5px);
+    }
 }
 
 .folderPath {
@@ -365,4 +400,30 @@
 
 .disabled:hover {
     background-color: rgb(73, 13, 130);
+}
+
+.dialogForUploadFile {
+    background-color: rgb(83, 14, 148);
+    border-radius: 20px;
+    border: none;
+    color: rgb(228, 216, 236);
+}
+.dialogForUploadFile div {
+    display: flex;
+    justify-content: center;
+    gap: 10px
+}
+.dialogForUploadFile button {
+    background-color: rgb(60, 3, 112);
+    color: rgb(228, 216, 236);
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 10px;
+    transition: 0.1s background-color;
+    padding: 5px 10px;
+    cursor: pointer;
+    gap: 10px;
+}
+.dialogForUploadFile button:hover {
+    background-color: rgb(119, 119, 119);
 }

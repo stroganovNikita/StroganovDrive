@@ -33,6 +33,7 @@ body {
 .welcomeSectionDiv h1 {
   color: rgb(160, 98, 217);
   text-align: center;
+  word-spacing: 2px;
   font-size: 2rem;
 }
 .welcomeSectionDiv p {

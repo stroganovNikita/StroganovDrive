@@ -9,7 +9,8 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
 exports.supabaseUploadFile = async (file, nickname) => {
   const { data, error } = await supabase.storage
   .from('test2')
-  .upload(nickname + file.originalname) 
+  .upload(nickname + file.originalname, file.buffer) 
+  
 };
 
 exports.supabaseDownloadFile = async (fileName, nickname) => {
@@ -19,13 +20,12 @@ exports.supabaseDownloadFile = async (fileName, nickname) => {
   
   const buffer = Buffer.from(await data.arrayBuffer());
 
-  if (error) ;
+  if (error) return error;
 
   return buffer
 };
 
 exports.supabaseDeleteFile = async (fileName, nickname) => {
-  console.log(nickname + fileName)
  const { data, error } = await supabase.storage
  .from('test2')
  .remove([nickname + fileName])

@@ -70,7 +70,7 @@
           </form>
         <% } %>
         <form class="formRestoreFolder" action="/deleteFile/<%=currentFolder%>/<%=locals.currentSubfolder || 'none'%>/<%=file.id%>" method="POST" > 
-          <button class="restoreFolderBtn">X</button>
+          <button class="restoreFolderBtn" onclick="return confirm('Deleted files cannot be recovered')">X</button>
         </form>
       </div>
 
