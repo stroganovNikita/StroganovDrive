@@ -1,6 +1,4 @@
 const { createClient } = require('@supabase/supabase-js');
-const { decode } = require('base64-arraybuffer');
-const fs = require('fs/promises');
 require('dotenv').config();
 
 
@@ -8,10 +6,10 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
   fetch: fetch.bind(globalThis)
  });
 
-exports.supabaseUploadFile = async (file, nickName) => {
+exports.supabaseUploadFile = async (file, nickname) => {
   const { data, error } = await supabase.storage
   .from('test2')
-  .upload(nickName + file.originalname) 
+  .upload(nickname + file.originalname) 
 };
 
 exports.supabaseDownloadFile = async (fileName, nickname) => {
@@ -21,9 +19,15 @@ exports.supabaseDownloadFile = async (fileName, nickname) => {
   
   const buffer = Buffer.from(await data.arrayBuffer());
 
-  console.log(data, error)
-
   if (error) ;
 
   return buffer
+};
+
+exports.supabaseDeleteFile = async (fileName, nickname) => {
+  console.log(nickname + fileName)
+ const { data, error } = await supabase.storage
+ .from('test2')
+ .remove([nickname + fileName])
+
 }

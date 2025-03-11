@@ -1,4 +1,5 @@
 const { PrismaClient } = await import('@prisma/client');
+const { supabaseDeleteFile } = await import('../configure/supabase.js')
 const prisma = new PrismaClient();
 const bcrypt = await import('bcryptjs');
 
@@ -214,7 +215,7 @@ async function uploadFileDB(folderId, userId, file) {
   });
 }
 
-async function deleteFileDB(fileId, recentlyDeletedFolderId) {
+async function deleteFileDB(fileId, recentlyDeletedFolderId, transliteName, username) {
   const check = await prisma.file.findUnique({
     where: {
       id: fileId
@@ -225,7 +226,8 @@ async function deleteFileDB(fileId, recentlyDeletedFolderId) {
       where: {
         id: fileId
       }
-    })
+    });
+    await supabaseDeleteFile(transliteName, username);
   } else {
   await prisma.file.update({
     where: {
@@ -257,7 +259,13 @@ async function restoreFileDB(fileId, personalFolderId) {
   })
 };
 
-
+async function checkNameFileDB(fileId) {
+  return await prisma.file.findUnique({
+    where: {
+      id: fileId
+    }
+  })
+}
 export { 
   signUpQueryDB, 
   checkNicknameDB, 
@@ -273,14 +281,10 @@ export {
   uploadFileDB,
   deleteFileDB,
   getParentFolderForFileDB,
-  restoreFileDB
+  restoreFileDB,
+  checkNameFileDB
 }
 
-// const check = await prisma.folder.findMany({
-//   where: {
-//     id: 3
-//   },
-//   include: {
-//     file: true
-//   }
-// });
+const test = await prisma.file.findMany()
+
+console.log(test)

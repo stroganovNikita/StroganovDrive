@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const { signUpValidator, logInValidator } = require('./validator');
-const { supabaseUploadFile, supabaseDownloadFile } = require('../configure/supabase.js')
+const { supabaseUploadFile, supabaseDownloadFile, supabaseDeleteFile } = require('../configure/supabase.js')
 const { transliterateFn } = require('../simpleJs/transliterate.js');
 const CustomError = require('../errors/customError.js');
 const db = import('../db/queries.js');
@@ -133,7 +133,10 @@ exports.updateFolder = async (req, res, next) => {
 exports.deleteFile = async (req, res, next) => {
   try {
     const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
-    await (await db).deleteFileDB(Number(req.params.fileId), primaryFolders[1].id);
+    const file = await (await db).checkNameFileDB(Number(req.params.fileId));
+    const transliteName = transliterateFn(file.name);
+
+    await (await db).deleteFileDB(Number(req.params.fileId), primaryFolders[1].id, transliteName, req.user.nickName);
     if (req.params.subfolderId == 'none') {
       res.redirect(`/folder/${req.params.folderId}`)
     } else {
@@ -148,7 +151,6 @@ exports.restoreFile = async (req, res, next) => {
   try {
     const parentFolderForFile = await (await db).getParentFolderForFileDB(Number(req.params.fileId));
     const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
-
     if(primaryFolders[1].id == parentFolderForFile.folderId) {
       await (await db).restoreFileDB(Number(req.params.fileId), primaryFolders[0].id);
       if (req.params.subfolderId == 'none') {
@@ -158,26 +160,28 @@ exports.restoreFile = async (req, res, next) => {
       }
     } 
   } catch {
-    next(new CustomError('Oops, something wont wrong. Write please to the developer'))
+    next(new CustomError('Oops, something wont wrong. Write please to the developer'));
   }
 };
 
 exports.uploadFile = async (req, res, next) => {
-  req.file.originalname = Buffer.from(req.file.originalname, 'latin1').toString('utf8')
+  req.file.originalname = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
   try {
     if (req.params.subfolderId == 'none') { 
       if (req.file.size/1000/1000 > 15) {
-        next(new CustomError('Error, maximum file size 15 mb'))
+        next(new CustomError('Error, maximum file size 15 mb'));
       }
-      await (await db).uploadFileDB(Number(req.params.folderId), req.user.id, req.file)
-      const transliterate = transliterateFn(req.file.originalname)
-      req.file.originalname = transliterate
-      await supabaseUploadFile(req.file, req.user.nickName)
+      await (await db).uploadFileDB(Number(req.params.folderId), req.user.id, req.file);
+      const transliterate = transliterateFn(req.file.originalname);
+      req.file.originalname = transliterate;
+      await supabaseUploadFile(req.file, req.user.nickName);
       res.redirect(`/folder/${req.params.folderId}`);
     } else {
-      await (await db).uploadFileDB(Number(req.params.subfolderId), req.user.id, req.file)
-      await supabaseUploadFile(req.file, req.user.nickName)
-      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`)
+      await (await db).uploadFileDB(Number(req.params.subfolderId), req.user.id, req.file);
+      const transliterate = transliterateFn(req.file.originalname);
+      req.file.originalname = transliterate;
+      await supabaseUploadFile(req.file, req.user.nickName);
+      res.redirect(`/folder/${req.params.folderId}/subfolder/${req.params.subfolderId}`);
     } 
   } catch {
       next(new CustomError("Error during upload, please write to the developer"));
