@@ -3,7 +3,7 @@ const { signUpValidator, logInValidator, newFolderName, newNameFolder } = requir
 const { supabaseUploadFile, supabaseDownloadFile } = require('../configure/supabase.js')
 const { transliterateFn } = require('../simpleJs/transliterate.js');
 const CustomError = require('../errors/customError.js');
-const db = import('../db/queries.js');
+const db = import('../db/queries.mjs');
 
 exports.handleMainPage = async (req, res) => {
   if (req.isAuthenticated()) {
