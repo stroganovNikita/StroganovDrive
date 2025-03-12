@@ -66,7 +66,10 @@ exports.handleFolder = async (req, res, next) => {
 exports.handleSubfolder = async (req, res, next) => {
   try {
     const primaryFolders = await (await db).getPrimaryFoldersDB(Number(req.user.id));
-    const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId));
+    const folders = await (await db).handleSubfolderDB(Number(req.params.subfolderId), req.user.id);
+    if (primaryFolders == undefined || folders == undefined) {
+      return next(new CustomError('Page not found. Maybe no such folder'));
+    };
     const path = await (await db).pathToRootDB(Number(req.params.subfolderId));
     res.locals.currentUser = req.user;
     res.locals.currentFolder = req.params.folderId;

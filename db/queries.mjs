@@ -52,10 +52,11 @@ async function handleFolderDB(id) {
   return folder[0]
 };
 
-async function handleSubfolderDB(id) {
+async function handleSubfolderDB(id, userId) {
   const folder = await prisma.folder.findMany({
     where: {
-      id: id
+      id: id,
+      authorId: userId
     },
     include: {
       childFolder: true,
